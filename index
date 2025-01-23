@@ -17,7 +17,9 @@
       <p class="text-lg sm:text-xl mb-8">Watch the trailer and demand a screening near you!</p>
       <!-- Trailer -->
       <div class="mb-8">
-        <iframe class="rounded-lg shadow-lg" width="560" height="315" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+        <div class="relative pb-16/9">
+          <iframe class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+        </div>
       </div>
       <!-- CTA Button -->
       <button id="demandButton" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg text-xl font-semibold transition">
@@ -27,13 +29,14 @@
   </header>
 
   <!-- Form Section -->
-  <section id="formSection" class="hidden py-16 px-6 bg-gray-800">
+  <section id="formSection" class="hidden py-16 px-6 bg-gray-800 transition-opacity duration-300 opacity-0" aria-hidden="true">
     <div class="max-w-xl mx-auto text-center">
       <h2 class="text-3xl font-bold mb-6">Demand It in Your City</h2>
       <p class="mb-8">Enter your ZIP code to see how many votes your city has received!</p>
       <!-- ZIP Code Form -->
       <form id="zipForm" class="space-y-4">
         <div>
+          <label for="zipCode" class="sr-only">ZIP Code</label>
           <input type="text" id="zipCode" name="zipCode" placeholder="Enter your ZIP Code" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
         </div>
         <button type="submit" class="bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg text-lg font-semibold transition">
@@ -45,13 +48,14 @@
   </section>
 
   <!-- Email Section -->
-  <section id="emailSection" class="hidden py-16 px-6 bg-gray-900">
+  <section id="emailSection" class="hidden py-16 px-6 bg-gray-900 transition-opacity duration-300 opacity-0" aria-hidden="true">
     <div class="max-w-xl mx-auto text-center">
       <h2 class="text-3xl font-bold mb-6">Stay in the Loop!</h2>
       <p id="emailMessage" class="mb-8"></p>
       <!-- Email Form -->
       <form id="emailForm" class="space-y-4">
         <div>
+          <label for="email" class="sr-only">Email Address</label>
           <input type="email" id="email" name="email" placeholder="Enter your Email Address" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
         </div>
         <button type="submit" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg text-lg font-semibold transition">
@@ -62,76 +66,92 @@
   </section>
 
   <!-- JavaScript -->
-  
-<script>
-  const demandButton = document.getElementById('demandButton');
-  const formSection = document.getElementById('formSection');
-  const emailSection = document.getElementById('emailSection');
-  const zipForm = document.getElementById('zipForm');
-  const emailForm = document.getElementById('emailForm');
-  const voteMessage = document.getElementById('voteMessage');
-  const emailMessage = document.getElementById('emailMessage');
+  <script>
+    const demandButton = document.getElementById('demandButton');
+    const formSection = document.getElementById('formSection');
+    const emailSection = document.getElementById('emailSection');
+    const zipForm = document.getElementById('zipForm');
+    const emailForm = document.getElementById('emailForm');
+    const voteMessage = document.getElementById('voteMessage');
+    const emailMessage = document.getElementById('emailMessage');
 
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbxbxmf4qppPEA0qpR4jPRgh8r2_Sy7TpXZFX00rHP1wUnKrXdPcyiCFZnhRy5z5yNI6/exec'; // Replace with your Google Apps Script Web App URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxbxmf4qppPEA0qpR4jPRgh8r2_Sy7TpXZFX00rHP1wUnKrXdPcyiCFZnhRy5z5yNI6/exec'; // Replace with your Google Apps Script Web App URL
 
-  // Mock vote data by ZIP code
-  const mockVotesByZip = {
-    '90001': 45,
-    '90210': 123,
-    '10001': 78
-  };
+    // Mock vote data by ZIP code
+    const mockVotesByZip = {
+      '90001': 45,
+      '90210': 123,
+      '10001': 78
+    };
 
-  // Show the form when "Demand It" is clicked
-  demandButton.addEventListener('click', () => {
-    formSection.classList.remove('hidden');
-    window.scrollTo({ top: formSection.offsetTop, behavior: 'smooth' });
-  });
+    // Show the form when "Demand It" is clicked
+    demandButton.addEventListener('click', () => {
+      formSection.classList.remove('hidden');
+      formSection.classList.add('opacity-100');
+      formSection.setAttribute('aria-hidden', 'false');
+      window.scrollTo({ top: formSection.offsetTop, behavior: 'smooth' });
+    });
 
-  // Handle ZIP Code form submission
-  zipForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // Prevent page refresh
-    const zipCode = document.getElementById('zipCode').value.trim();
+    // Handle ZIP Code form submission
+    zipForm.addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent page refresh
+      const zipCode = document.getElementById('zipCode').value.trim();
 
-    // Check if ZIP exists in mock data
-    const votes = mockVotesByZip[zipCode] || 0; // Default to 0 votes
-
-    // Show vote message
-    voteMessage.textContent = `We have ${votes} votes for this film to come to your area. We'll send you an email as soon as we're ready to release.`;
-    voteMessage.classList.remove('hidden');
-
-    // Transition to email section
-    setTimeout(() => {
-      formSection.classList.add('hidden');
-      emailSection.classList.remove('hidden');
-      emailMessage.textContent = `Stay tuned! Enter your email to get notified about screenings in ZIP code ${zipCode}.`;
-    }, 2000); // Delay for better UX
-  });
-
-  // Handle Email form submission
-  emailForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // Prevent page refresh
-    const zipCode = document.getElementById('zipCode').value.trim();
-    const email = document.getElementById('email').value.trim();
-
-    // Send data to Google Apps Script
-    fetch(scriptURL, {
-      method: 'POST',
-      body: JSON.stringify({ zipCode, email }),
-      headers: { 'Content-Type': 'application/json' }
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.result === 'success') {
-        alert('Thank you for demanding the film! You\'ll hear from us soon.');
-        emailSection.classList.add('hidden'); // Optionally hide form after submission
-      } else {
-        alert('There was an error. Please try again.');
+      // Validate ZIP code
+      if (!/^[0-9]{5}$/.test(zipCode)) {
+        alert('Please enter a valid 5-digit ZIP code.');
+        return;
       }
-    })
-    .catch((error) => console.error('Error:', error));
-  });
-</script>
+
+      // Check if ZIP exists in mock data
+      const votes = mockVotesByZip[zipCode] || 0; // Default to 0 votes
+
+      // Show vote message
+      voteMessage.textContent = `We have ${votes} votes for this film to come to your area. We'll send you an email as soon as we're ready to release.`;
+      voteMessage.classList.remove('hidden');
+
+      // Transition to email section
+      setTimeout(() => {
+        formSection.classList.add('hidden');
+        formSection.setAttribute('aria-hidden', 'true');
+        emailSection.classList.remove('hidden');
+        emailSection.classList.add('opacity-100');
+        emailSection.setAttribute('aria-hidden', 'false');
+        emailMessage.textContent = `Stay tuned! Enter your email to get notified about screenings in ZIP code ${zipCode}.`;
+      }, 2000); // Delay for better UX
+    });
+
+    // Handle Email form submission
+    emailForm.addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent page refresh
+      const email = document.getElementById('email').value.trim();
+
+      // Validate email
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      // Send data to Google Apps Script
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify({ zipCode: document.getElementById('zipCode').value.trim(), email }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result === 'success') {
+          emailSection.innerHTML = '<p class="text-xl font-semibold">Thank you! We’ll notify you about screenings in your area.</p>';
+        } else {
+          alert('There was an error. Please try again.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again later.');
+      });
+    });
+  </script>
 
 </body>
 </html>
-
