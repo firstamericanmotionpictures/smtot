@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demand It</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+  <!-- Hero Section -->
+  <header class="bg-cover bg-center h-screen flex items-center justify-center relative" style="background-image: url('https://source.unsplash.com/1600x900/?cinema,movie');">
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+    <div class="z-10 text-center max-w-2xl">
+      <h1 class="text-4xl sm:text-6xl font-bold mb-6">Bring This Film to Your City</h1>
+      <p class="text-lg sm:text-xl mb-8">Watch the trailer and demand a screening near you!</p>
+      <!-- Trailer -->
+      <div class="mb-8">
+        <iframe class="rounded-lg shadow-lg" width="560" height="315" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <!-- CTA Button -->
+      <button id="demandButton" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg text-xl font-semibold transition">
+        Demand It Now
+      </button>
+    </div>
+  </header>
+
+  <!-- Form Section -->
+  <section id="formSection" class="hidden py-16 px-6 bg-gray-800">
+    <div class="max-w-xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">Demand It in Your City</h2>
+      <p class="mb-8">Enter your ZIP code to see how many votes your city has received!</p>
+      <!-- ZIP Code Form -->
+      <form id="zipForm" class="space-y-4">
+        <div>
+          <input type="text" id="zipCode" name="zipCode" placeholder="Enter your ZIP Code" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div>
+        <button type="submit" class="bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg text-lg font-semibold transition">
+          Submit ZIP Code
+        </button>
+      </form>
+      <div id="voteMessage" class="hidden mt-8 text-lg font-medium"></div>
+    </div>
+  </section>
+
+  <!-- Email Section -->
+  <section id="emailSection" class="hidden py-16 px-6 bg-gray-900">
+    <div class="max-w-xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">Stay in the Loop!</h2>
+      <p id="emailMessage" class="mb-8"></p>
+      <!-- Email Form -->
+      <form id="emailForm" class="space-y-4">
+        <div>
+          <input type="email" id="email" name="email" placeholder="Enter your Email Address" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg text-lg font-semibold transition">
+          Submit Email
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- JavaScript -->
+  
+<script>
+  const demandButton = document.getElementById('demandButton');
+  const formSection = document.getElementById('formSection');
+  const emailSection = document.getElementById('emailSection');
+  const zipForm = document.getElementById('zipForm');
+  const emailForm = document.getElementById('emailForm');
+  const voteMessage = document.getElementById('voteMessage');
+  const emailMessage = document.getElementById('emailMessage');
+
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbxbxmf4qppPEA0qpR4jPRgh8r2_Sy7TpXZFX00rHP1wUnKrXdPcyiCFZnhRy5z5yNI6/exec'; // Replace with your Google Apps Script Web App URL
+
+  // Mock vote data by ZIP code
+  const mockVotesByZip = {
+    '90001': 45,
+    '90210': 123,
+    '10001': 78
+  };
+
+  // Show the form when "Demand It" is clicked
+  demandButton.addEventListener('click', () => {
+    formSection.classList.remove('hidden');
+    window.scrollTo({ top: formSection.offsetTop, behavior: 'smooth' });
+  });
+
+  // Handle ZIP Code form submission
+  zipForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // Prevent page refresh
+    const zipCode = document.getElementById('zipCode').value.trim();
+
+    // Check if ZIP exists in mock data
+    const votes = mockVotesByZip[zipCode] || 0; // Default to 0 votes
+
+    // Show vote message
+    voteMessage.textContent = `We have ${votes} votes for this film to come to your area. We'll send you an email as soon as we're ready to release.`;
+    voteMessage.classList.remove('hidden');
+
+    // Transition to email section
+    setTimeout(() => {
+      formSection.classList.add('hidden');
+      emailSection.classList.remove('hidden');
+      emailMessage.textContent = `Stay tuned! Enter your email to get notified about screenings in ZIP code ${zipCode}.`;
+    }, 2000); // Delay for better UX
+  });
+
+  // Handle Email form submission
+  emailForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // Prevent page refresh
+    const zipCode = document.getElementById('zipCode').value.trim();
+    const email = document.getElementById('email').value.trim();
+
+    // Send data to Google Apps Script
+    fetch(scriptURL, {
+      method: 'POST',
+      body: JSON.stringify({ zipCode, email }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.result === 'success') {
+        alert('Thank you for demanding the film! You\'ll hear from us soon.');
+        emailSection.classList.add('hidden'); // Optionally hide form after submission
+      } else {
+        alert('There was an error. Please try again.');
+      }
+    })
+    .catch((error) => console.error('Error:', error));
+  });
+</script>
+
+</body>
+</html>
+
