@@ -1,3 +1,8 @@
+---
+layout: cayman
+title: Demand It
+---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,61 +14,63 @@
 </head>
 <body class="bg-gray-900 text-white font-sans">
 
-  <!-- Hero Section -->
-  <header class="bg-cover bg-center h-screen flex items-center justify-center relative" style="background-image: url('https://source.unsplash.com/1600x900/?cinema,movie');">
-    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-    <div class="z-10 text-center max-w-2xl">
-      <h1 class="text-4xl sm:text-6xl font-bold mb-6">Bring This Film to Your City</h1>
-      <p class="text-lg sm:text-xl mb-8">Watch the trailer and demand a screening near you!</p>
-      <!-- Trailer -->
-      <div class="mb-8">
-        <div class="relative pb-16/9">
-          <iframe class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
-        </div>
+
+
+<!-- Hero Section -->
+<header class="bg-cover bg-center h-screen flex items-center justify-center relative" style="background-image: url('https://source.unsplash.com/1600x900/?cinema,movie');">
+  <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+  <div class="z-10 text-center max-w-2xl">
+    <h1 class="text-4xl sm:text-6xl font-bold mb-6">Bring This Film to Your City</h1>
+    <p class="text-lg sm:text-xl mb-8">Watch the trailer and demand a screening near you!</p>
+    <!-- Trailer -->
+    <div class="mb-8">
+      <div class="relative pb-16/9">
+        <iframe class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
       </div>
-      <!-- CTA Button -->
-      <button id="demandButton" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg text-xl font-semibold transition">
-        Demand It Now
+    </div>
+    <!-- CTA Button -->
+    <button id="demandButton" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg text-xl font-semibold transition">
+      Demand It Now
+    </button>
+  </div>
+</header>
+
+<!-- Form Section -->
+<section id="formSection" class="hidden py-16 px-6 bg-gray-800 transition-opacity duration-300 opacity-0" aria-hidden="true">
+  <div class="max-w-xl mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-6">Demand It in Your City</h2>
+    <p class="mb-8">Enter your ZIP code to see how many votes your city has received!</p>
+    <!-- ZIP Code Form -->
+    <form id="zipForm" class="space-y-4">
+      <div>
+        <label for="zipCode" class="sr-only">ZIP Code</label>
+        <input type="text" id="zipCode" name="zipCode" placeholder="Enter your ZIP Code" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      </div>
+      <button type="submit" class="bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg text-lg font-semibold transition">
+        Submit ZIP Code
       </button>
-    </div>
-  </header>
+    </form>
+    <div id="voteMessage" class="hidden mt-8 text-lg font-medium"></div>
+  </div>
+</section>
 
-  <!-- Form Section -->
-  <section id="formSection" class="hidden py-16 px-6 bg-gray-800 transition-opacity duration-300 opacity-0" aria-hidden="true">
-    <div class="max-w-xl mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-6">Demand It in Your City</h2>
-      <p class="mb-8">Enter your ZIP code to see how many votes your city has received!</p>
-      <!-- ZIP Code Form -->
-      <form id="zipForm" class="space-y-4">
-        <div>
-          <label for="zipCode" class="sr-only">ZIP Code</label>
-          <input type="text" id="zipCode" name="zipCode" placeholder="Enter your ZIP Code" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-        </div>
-        <button type="submit" class="bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg text-lg font-semibold transition">
-          Submit ZIP Code
-        </button>
-      </form>
-      <div id="voteMessage" class="hidden mt-8 text-lg font-medium"></div>
-    </div>
-  </section>
-
-  <!-- Email Section -->
-  <section id="emailSection" class="hidden py-16 px-6 bg-gray-900 transition-opacity duration-300 opacity-0" aria-hidden="true">
-    <div class="max-w-xl mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-6">Stay in the Loop!</h2>
-      <p id="emailMessage" class="mb-8"></p>
-      <!-- Email Form -->
-      <form id="emailForm" class="space-y-4">
-        <div>
-          <label for="email" class="sr-only">Email Address</label>
-          <input type="email" id="email" name="email" placeholder="Enter your Email Address" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-        </div>
-        <button type="submit" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg text-lg font-semibold transition">
-          Submit Email
-        </button>
-      </form>
-    </div>
-  </section>
+<!-- Email Section -->
+<section id="emailSection" class="hidden py-16 px-6 bg-gray-900 transition-opacity duration-300 opacity-0" aria-hidden="true">
+  <div class="max-w-xl mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-6">Stay in the Loop!</h2>
+    <p id="emailMessage" class="mb-8"></p>
+    <!-- Email Form -->
+    <form id="emailForm" class="space-y-4">
+      <div>
+        <label for="email" class="sr-only">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your Email Address" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      </div>
+      <button type="submit" class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg text-lg font-semibold transition">
+        Submit Email
+      </button>
+    </form>
+  </div>
+</section>
 
   <!-- JavaScript -->
   <script>
