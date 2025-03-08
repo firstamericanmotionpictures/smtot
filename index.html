@@ -1,7 +1,3 @@
----
-layout: minima
-title: Demand It
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,8 +17,8 @@ title: Demand It
     <p class="text-lg sm:text-xl mb-8">Watch the trailer and demand a screening near you!</p>
     <!-- Trailer -->
     <div class="mb-8">
-      <div class="relative pb-16/9">
-        <iframe class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+      <div class="relative pb-[56.25%]">
+        <iframe class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg" src="https://youtu.be/8_sOPmWjgl8?si=2zO11p3FVRX0EtyD" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
     <!-- CTA Button -->
@@ -32,153 +28,43 @@ title: Demand It
   </div>
 </header>
 
-<!-- Form Section -->
-<section id="formSection" class="hidden py-16 px-6 bg-gray-800 transition-opacity duration-300 opacity-0" aria-hidden="true">
-  <div class="max-w-xl mx-auto text-center">
-    <h2 class="text-3xl font-bold mb-6">Demand It in Your Area</h2>
-    <p class="mb-8">Choose your area to see how many people have requested this film nearby!</p>
-    <!-- Area Selection Form -->
-    <form id="areaForm" class="space-y-4">
-      <div>
-        <label for="area" class="sr-only">Select your area</label>
-        <select id="area" name="area" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          <option value="" disabled selected>Select your area</option>
-          <option value="new-york">New York City Metro Area</option>
-          <option value="los-angeles">Los Angeles</option>
-          <option value="chicago">Chicago</option>
-          <option value="atlanta">Atlanta</option>
-          <option value="bay-area">San Francisco Bay Area</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      <button type="submit" class="bg-gradient-to-r from-green-500 to-lime-500 hover:from-lime-500 hover:to-green-500 px-8 py-4 rounded-full text-lg font-semibold shadow-lg transform transition-transform hover:scale-105">
-        Submit Area
-      </button>
-    </form>
-    <div id="voteMessage" class="hidden mt-8 text-lg font-medium"></div>
+<!-- Carousel Section -->
+<section class="py-16 px-6 bg-gray-800 text-center">
+  <h2 class="text-3xl font-bold mb-6">Film Stills</h2>
+  <div class="relative w-full max-w-4xl mx-auto overflow-hidden">
+    <div class="flex transition-transform duration-500 ease-in-out" id="carousel">
+      <img src="https://source.unsplash.com/800x500/?film" class="w-full object-cover rounded-lg shadow-lg" alt="Still 1">
+      <img src="https://source.unsplash.com/800x500/?cinema" class="w-full object-cover rounded-lg shadow-lg" alt="Still 2">
+      <img src="https://source.unsplash.com/800x500/?movie" class="w-full object-cover rounded-lg shadow-lg" alt="Still 3">
+    </div>
+  </div>
+  <div class="mt-4 flex justify-center space-x-4">
+    <button id="prev" class="bg-gray-700 px-4 py-2 rounded">&#9665;</button>
+    <button id="next" class="bg-gray-700 px-4 py-2 rounded">&#9655;</button>
   </div>
 </section>
 
-<!-- Email Section -->
-<section id="emailSection" class="hidden py-16 px-6 bg-gray-900 transition-opacity duration-300 opacity-0" aria-hidden="true">
-  <div class="max-w-xl mx-auto text-center">
-    <h2 class="text-3xl font-bold mb-6">Stay in the Loop!</h2>
-    <p id="emailMessage" class="mb-8"></p>
-    <!-- Email Form -->
-    <form id="emailForm" class="space-y-4">
-      <div>
-        <label for="email" class="sr-only">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="Enter your Email Address" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-      </div>
-      <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-purple-500 hover:to-blue-500 px-8 py-4 rounded-full text-lg font-semibold shadow-lg transform transition-transform hover:scale-105">
-        Submit Email
-      </button>
-    </form>
-  </div>
-</section>
+<!-- JavaScript -->
+<script>
+  const carousel = document.getElementById('carousel');
+  const images = carousel.children;
+  let index = 0;
 
-  <!-- JavaScript -->
-  <script>
-    const demandButton = document.getElementById('demandButton');
-    const formSection = document.getElementById('formSection');
-    const emailSection = document.getElementById('emailSection');
-    const areaForm = document.getElementById('areaForm');
-    const emailForm = document.getElementById('emailForm');
-    const voteMessage = document.getElementById('voteMessage');
-    const emailMessage = document.getElementById('emailMessage');
+  document.getElementById('next').addEventListener('click', () => {
+    index = (index + 1) % images.length;
+    updateCarousel();
+  });
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxbxmf4qppPEA0qpR4jPRgh8r2_Sy7TpXZFX00rHP1wUnKrXdPcyiCFZnhRy5z5yNI6/exec'; // Replace with your Google Apps Script Web App URL
+  document.getElementById('prev').addEventListener('click', () => {
+    index = (index - 1 + images.length) % images.length;
+    updateCarousel();
+  });
 
-    // Mock vote data by area
-    const mockVotesByArea = {
-      'new-york': 123,
-      'los-angeles': 98,
-      'chicago': 67,
-      'atlanta': 45,
-      'bay-area': 82
-    };
-
-    // Show the form when "Demand It" is clicked
-    demandButton.addEventListener('click', () => {
-      formSection.classList.remove('hidden');
-      formSection.classList.add('opacity-100');
-      formSection.setAttribute('aria-hidden', 'false');
-      window.scrollTo({ top: formSection.offsetTop, behavior: 'smooth' });
-    });
-
-    // Handle Area selection form submission
-    areaForm.addEventListener('submit', (e) => {
-      e.preventDefault(); // Prevent page refresh
-      const area = document.getElementById('area').value;
-
-      // Validate area selection
-      if (!area) {
-        alert('Please select your area.');
-        return;
-      }
-
-      // Check if area exists in mock data
-      const votes = mockVotesByArea[area] || 0; // Default to 0 votes
-
-      // Show vote message
-      voteMessage.textContent = `We have ${votes} votes for this film to come to your area. We'll send you an email as soon as we're ready to release.`;
-      voteMessage.classList.remove('hidden');
-
-      // Transition to email section
-      setTimeout(() => {
-        formSection.classList.add('hidden');
-        formSection.setAttribute('aria-hidden', 'true');
-        emailSection.classList.remove('hidden');
-        emailSection.classList.add('opacity-100');
-        emailSection.setAttribute('aria-hidden', 'false');
-        emailMessage.textContent = `Stay tuned! Enter your email to get notified about screenings in the ${area.replace('-', ' ')}.`;
-      }, 2000); // Delay for better UX
-    });
-
-    // Handle Email form submission
-    emailForm.addEventListener('submit', (e) => {
-      e.preventDefault(); // Prevent page refresh
-      const email = document.getElementById('email').value.trim();
-
-      // Validate email
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert('Please enter a valid email address.');
-        return;
-      }
-
-      // Debugging fetch request
-      console.log('Sending data to Google Apps Script:', { area: document.getElementById('area').value, email });
-
-      // Send data to Google Apps Script
-      fetch(scriptURL, {
-        method: 'POST',
-        mode: 'cors', // Ensure CORS is enabled
-        body: JSON.stringify({ area: document.getElementById('area').value, email }),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then((response) => {
-        console.log('Response received:', response);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Data received:', data);
-        if (data.result === 'success') {
-          emailSection.innerHTML = '<p class="text-xl font-semibold">Thank you! We’ll notify you about screenings in your area.</p>';
-        } else {
-          alert('There was an error. Please try again.');
-        }
-      })
-      .catch((error) => {
-        console.error('Error occurred during fetch:', error);
-        alert('Something went wrong. Please try again later.');
-      });
-    });
-  </script>
+  function updateCarousel() {
+    const offset = -index * 100;
+    carousel.style.transform = `translateX(${offset}%)`;
+  }
+</script>
 
 </body>
 </html>
-
-
