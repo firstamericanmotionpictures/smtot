@@ -64,6 +64,27 @@
     const offset = -index * 100;
     carousel.style.transform = `translateX(${offset}%)`;
   }
+// Demand Button Functionality
+  const demandButton = document.getElementById('demandButton');
+  const demandModal = document.getElementById('demandModal');
+  const emailModal = document.getElementById('emailModal');
+  const nextStep = document.getElementById('nextStep');
+  const submitDemand = document.getElementById('submitDemand');
+
+  demandButton.addEventListener('click', () => {
+    demandModal.classList.remove('hidden');
+  });
+
+  nextStep.addEventListener('click', () => {
+    demandModal.classList.add('hidden');
+    emailModal.classList.remove('hidden');
+  });
+
+  submitDemand.addEventListener('click', () => {
+    alert('Thank you for your submission!');
+    emailModal.classList.add('hidden');
+  });
+  
 </script>
 
 </body>
